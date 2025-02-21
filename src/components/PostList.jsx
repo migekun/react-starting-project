@@ -5,15 +5,12 @@ import Modal from './Modal';
 import classes from './PostsList.module.css';
 
 function PostList({isPosting, onStopPosting}) {
-    const [enteredBody, setEnteredBody] = useState('');
-    const [enteredAuthor, setEnteredAuthor] = useState('');
+    const [posts, setPosts] = useState([]);
 
-    function bodyChangeHandler(event) {
-        setEnteredBody(event.target.value);
-    }
-
-    function authorChangeHandler(event) {
-        setEnteredAuthor(event.target.value);
+    function addPostHandler(postData) {
+        setPosts((prevPosts) => {
+            return [postData, ...prevPosts];
+        });
     }
 
     return (
@@ -21,16 +18,24 @@ function PostList({isPosting, onStopPosting}) {
             {isPosting && ( 
                 <Modal onClose={onStopPosting}>
                     <NewPost 
-                        onBodyChange={bodyChangeHandler} 
-                        onAuthorChange={authorChangeHandler}
                         onCancel={onStopPosting}
+                        onAddPost={addPostHandler}
                         />
                 </Modal>
             )}
-            <ul className={classes.posts}>
-                <Post author={enteredAuthor} body={enteredBody} />
-                <Post author="Miguel" body="me gusta protos" />
-            </ul>
+            {posts.length > 0 && (
+                <ul className={classes.posts}>
+                    {posts.map((post) => (
+                        <Post key={Math.random()} body={post.body} author={post.author} />
+                    ))}
+                </ul>
+            )}
+            {posts.length === 0 && (
+                <div style={{textAlign: 'center', color: 'white'}}>
+                    <h2>No posts found.</h2>
+                    <p>Start adding some!</p>
+                </div>
+            )}
         </>
     )
 }
