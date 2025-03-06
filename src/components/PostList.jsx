@@ -10,7 +10,7 @@ function PostList() {
             {posts.length > 0 && (
                 <ul className={classes.posts}>
                     {posts.map((post) => (
-                        <Post key={Math.random()} body={post.body} author={post.author} />
+                        <Post key={post.id} id={post.id} body={post.body} author={post.author} />
                     ))}
                 </ul>
             )}
